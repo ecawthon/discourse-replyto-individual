@@ -31,6 +31,7 @@ after_initialize do
         else
           p = Post.find_by_id @opts[:post_id]
           result['From'] = "#{p.user.name} <#{p.user.email}>"
+          result['Reply-To'] = result['From']
           result['To'] = @reply_by_email_address
         end
       else
