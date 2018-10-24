@@ -10,11 +10,11 @@
 en:
   js:
     composer:
-      reply: "Reply All"
+      reply: "Reply"
 
     topic:
       reply:
-        title: 'Reply All'
+        title: 'Reply'
         help: 'begin composing a reply to all users on this topic'
 
 # As of now, leave the post replies untouched. Eventually, we'll have to figure out how to properly
