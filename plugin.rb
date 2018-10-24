@@ -25,7 +25,7 @@ after_initialize do
       result['X-Discourse-Topic-Id'] = @opts[:topic_id].to_s if @opts[:topic_id]
   
       if allow_reply_by_email?
-        result[ALLOW_REPLY_BY_EMAIL_HEADER] = true
+        result[Email::MessageBuilder::ALLOW_REPLY_BY_EMAIL_HEADER] = true
         if @opts[:private_reply] == true
           result['Reply-To'] = reply_by_email_address
         else
