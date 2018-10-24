@@ -14,11 +14,13 @@ after_initialize do
     def build_args
         p = Post.find_by_id(@opts[:post_id])
       {
-       to: @reply_by_email_address,
+       to: @to,
+       cc: @reply_by_email_address,
        subject: subject,
        body: body,
        charset: 'UTF-8',
-       from: "#{p.user.name} <#{p.user.email}>"
+       from: "#{p.user.name} <#{p.user.email}>",
+       reply_to: "#{p.user.name} <#{p.user.email}>"
       }
     end
 
