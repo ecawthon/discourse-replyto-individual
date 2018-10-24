@@ -38,7 +38,7 @@ after_initialize do
         result['Reply-To'] = from_value
       end
 
-      result.merge(MessageBuilder.custom_headers(SiteSetting.email_custom_headers))
+      result.merge(Email::MessageBuilder.custom_headers(SiteSetting.email_custom_headers))
     end
   end
 end
