@@ -22,9 +22,7 @@ after_initialize do
        from: from_value
       }
       if allow_reply_by_email?
-        if @opts[:private_reply] == true
-          result['reply_to'] = reply_by_email_address
-        else
+        if !@opts[:private_reply] == true
           p = Post.find_by_id @opts[:post_id]
           result['from'] = "#{p.user.name} <#{p.user.email}>"
           result['reply_to'] = "#{p.user.name} <#{p.user.email}>"
@@ -50,9 +48,11 @@ after_initialize do
 
       if @opts[:private_reply] == true
         @message.header['Reply-To'] =
-          header_value('Reply-To').gsub!("%{reply_key}", reply_key)
+            @message.try(:reply_to).gsub!("%{reply_key}", reply_key)
+        @message.header.reply_to =
+            @message.try(:reply_to).gsub!("%{reply_key}", reply_key)
       else
-        @message.header['cc'] = header_value('cc').gsub!("%{reply_key}", reply_key)
+          @message.header['cc'] = @message.try(:cc).gsub!("%{reply_key}", reply_key)
       end
     end
   end
