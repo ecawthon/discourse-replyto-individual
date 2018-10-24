@@ -46,7 +46,10 @@ after_initialize do
         user_id: user_id
       ).reply_key
 
-        @message.header['cc'] = @message.try(:cc).gsub!("%{reply_key}",
+      cc = @message.try(:cc)
+      cc = cc.first if Array === cc
+      @message.header['cc'] =
+          (cc || SiteSetting.reply_by_email_address.dup).gsub!("%{reply_key}",
                                                         reply_key)
     end
   end
