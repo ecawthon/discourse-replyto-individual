@@ -12,45 +12,27 @@ after_initialize do
   Email::MessageBuilder.class_eval do
 
     def build_args
-        p = Post.find_by_id(@opts[:post_id])
-      {
+      p = Post.find_by_id(@opts[:post_id])
+      result = {
        to: @to,
        cc: @reply_by_email_address,
        subject: subject,
        body: body,
        charset: 'UTF-8',
-       from: "#{p.user.name} <#{p.user.email}>",
-       reply_to: "#{p.user.name} <#{p.user.email}>"
+       from: from_value
       }
-    end
-
-    def header_args
-      result = {}
-      if @opts[:add_unsubscribe_link]
-        unsubscribe_url = @template_args[:unsubscribe_url].presence || @template_args[:user_preferences_url]
-        result['List-Unsubscribe'] = "<#{unsubscribe_url}>"
-      end
-
-      result['X-Discourse-Post-Id']  = @opts[:post_id].to_s  if @opts[:post_id]
-      result['X-Discourse-Topic-Id'] = @opts[:topic_id].to_s if @opts[:topic_id]
-
-      # please, don't send us automatic responses...
-      result['X-Auto-Response-Suppress'] = 'All'
-
       if allow_reply_by_email?
-        result[Email::MessageBuilder::ALLOW_REPLY_BY_EMAIL_HEADER] = true
         if @opts[:private_reply] == true
-          result['Reply-To'] = @reply_by_email_address
+          result['reply_to'] = reply_by_email_address
         else
           p = Post.find_by_id @opts[:post_id]
-          result['Reply-To'] = "#{p.user.name} <#{p.user.email}>"
-          result['CC'] = @reply_by_email_address
+          result['from'] = "#{p.user.name} <#{p.user.email}>"
+          result['reply_to'] = "#{p.user.name} <#{p.user.email}>"
+          result['cc'] = reply_by_email_address
         end
-      else
-        result['Reply-To'] = @from_value
       end
-
-      result.merge(Email::MessageBuilder.custom_headers(SiteSetting.email_custom_headers))
+      result
     end
+
   end
 end
