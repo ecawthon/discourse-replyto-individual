@@ -48,9 +48,8 @@ after_initialize do
 
       cc = @message.try(:cc)
       cc = cc.first if Array === cc
-      @message.header['cc'] =
-          (cc || SiteSetting.reply_by_email_address.dup).gsub!("%{reply_key}",
-                                                        reply_key)
+      cc = cc || SiteSetting.reply_by_email_address.dup
+      @message.header['cc'] = cc.gsub!("%{reply_key}", reply_key)
     end
   end
 end
