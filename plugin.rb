@@ -30,8 +30,8 @@ after_initialize do
           result['Reply-To'] = reply_by_email_address
         else
           p = Post.find_by_id @opts[:post_id]
-          result['Reply-To'] = "#{p.user.name} <#{p.user.email}>"
-          result['CC'] = reply_by_email_address
+          result['From'] = "#{p.user.name} <#{p.user.email}>"
+          result['To'] = reply_by_email_address
         end
       else
         result['Reply-To'] = from_value
