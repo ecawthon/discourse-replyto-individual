@@ -35,7 +35,7 @@ after_initialize do
       # please, don't send us automatic responses...
       result['X-Auto-Response-Suppress'] = 'All'
 
-      if Email::MessageBuilder.allow_reply_by_email?
+      if allow_reply_by_email?
         result[Email::MessageBuilder::ALLOW_REPLY_BY_EMAIL_HEADER] = true
         if @opts[:private_reply] == true
           result['Reply-To'] = @reply_by_email_address
