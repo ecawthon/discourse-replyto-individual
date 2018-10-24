@@ -46,14 +46,12 @@ after_initialize do
         user_id: user_id
       ).reply_key
 
-      if @opts[:private_reply] == true
         @message.header['Reply-To'] =
-            @message.try(:reply_to).gsub!("%{reply_key}", reply_key)
+          @message.try(:reply_to).gsub!("%{reply_key}", reply_key)
         @message.header.reply_to =
-            @message.try(:reply_to).gsub!("%{reply_key}", reply_key)
-      else
-          @message.header['cc'] = @message.try(:cc).gsub!("%{reply_key}", reply_key)
-      end
+          @message.try(:reply_to).gsub!("%{reply_key}", reply_key)
+        @message.header['cc'] = @message.try(:cc).gsub!("%{reply_key}",
+                                                        reply_key)
     end
   end
 end
